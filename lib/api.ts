@@ -41,6 +41,7 @@ export const fetchNotes = async ({page = 1, perPage = 12, search = '', tag}: Fet
             ...(tag && tag !== "All" ? {tag} : {}),
         },
     });
+
     
     const raw = response.data;
     return {
