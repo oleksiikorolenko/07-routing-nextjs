@@ -3,14 +3,20 @@
 import css from './NotePreview.module.css';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
 import { fetchNoteById } from '@/lib/api';
-import NotePreviewModal from '@/components/NotePreviewModal/NotePreviewModal';
+import Modal from '@/components/Modal/Modal';
 
-export default function NotePreview() {
+type Props = {
+    id: string;
+}
+
+export default function NotePreview({ id }: Props) {
     const router = useRouter();
-    const close = () => router.back();
-    const { id } = useParams<{ id: string }>();
+    
+    const handleClickClose = () => {
+        router.back()
+    };
+   
     
     const { data, isLoading, isError } = useQuery({
         queryKey: ['note', id],
@@ -23,7 +29,7 @@ export default function NotePreview() {
   if (!data) return <p>Note not found</p>
 
     return (
-        <NotePreviewModal>
+        <Modal onClose={handleClickClose}>
         <div className={css.container}>
 	<div className={css.item}>
 	  <div className={css.header}>
@@ -32,9 +38,9 @@ export default function NotePreview() {
                 <p className={css.content}>{data.content}</p>
                 <p className={css.date}>{new Date(data.createdAt).toLocaleString()}</p>
                 </div>
-                <button onClick={close} className={css.backBtn}>Close</button>
+                <button onClick={handleClickClose} className={css.backBtn}>Close</button>
             </div>
-            </NotePreviewModal>
+            </Modal>
     );
 
 
